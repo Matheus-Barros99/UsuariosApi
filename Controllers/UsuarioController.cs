@@ -20,7 +20,7 @@ namespace UsuariosApi.Controllers
         /// Retorna todos os usuários cadastrados
         /// </summary>
         /// <returns>Status code</returns>
-        [HttpGet]
+        [HttpGet("RecuperaUsuarios")]
         public async Task<IActionResult> GetAllUsers()
         {
             var usuarios = await _context.Users.ToListAsync();
@@ -51,13 +51,15 @@ namespace UsuariosApi.Controllers
         /// </summary>
         /// <param name="usuario">Usuário a ser cadastrado</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("SalvaUsuario")]
         public async Task<IActionResult> CreateUser([FromBody] Models.User usuario)
         {
             if (usuario == null)
             {
                 return StatusCode((int)HttpStatusCode.BadRequest);
             }
+
+            usuario.Senha = Guid.NewGuid().ToString();
 
             await _context.Users.AddAsync(usuario);
             await _context.SaveChangesAsync();
