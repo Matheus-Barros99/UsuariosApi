@@ -20,7 +20,7 @@ namespace UsuariosApi.Controllers
         /// Retorna todos os usuários cadastrados
         /// </summary>
         /// <returns>Status code</returns>
-        [HttpGet("RecuperaUsuarios")]
+        [HttpGet("RecuperarUsuarios")]
         public async Task<IActionResult> GetAllUsers()
         {
             var usuarios = await _context.Users.ToListAsync();
@@ -51,7 +51,7 @@ namespace UsuariosApi.Controllers
         /// </summary>
         /// <param name="usuario">Usuário a ser cadastrado</param>
         /// <returns></returns>
-        [HttpPost("SalvaUsuario")]
+        [HttpPost("SalvarUsuario")]
         public async Task<IActionResult> CreateUser([FromBody] Models.User usuario)
         {
             if (usuario == null)
@@ -74,7 +74,7 @@ namespace UsuariosApi.Controllers
         /// <param name="id">Id do usuário a ser atualizado</param>
         /// <param name="usuario">Modelo de usuário alterado</param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("EditarUsuario")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] Models.User usuario)
         {
             if (id != usuario.Id)
@@ -111,7 +111,7 @@ namespace UsuariosApi.Controllers
         /// </summary>
         /// <param name="id">Id do usuário a ser deletado</param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("ExcluirUsuario")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var usuario = await _context.Users.FindAsync(id);
