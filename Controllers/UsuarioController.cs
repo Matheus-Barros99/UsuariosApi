@@ -59,7 +59,8 @@ namespace UsuariosApi.Controllers
                 return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
-            usuario.Senha = Guid.NewGuid().ToString();
+            usuario.Salt = Utilidades.PasswordHasher.SaltGenerator();
+            usuario.Senha = Utilidades.PasswordHasher.HashSenha(usuario.Senha, usuario.Salt);
 
             await _context.Users.AddAsync(usuario);
             await _context.SaveChangesAsync();
@@ -80,6 +81,9 @@ namespace UsuariosApi.Controllers
             {
                 return StatusCode((int)HttpStatusCode.BadRequest);
             }
+
+            usuario.Salt = Utilidades.PasswordHasher.SaltGenerator();
+            usuario.Senha = Utilidades.PasswordHasher.HashSenha(usuario.Senha, usuario.Salt);
 
             _context.Entry(usuario).State = EntityState.Modified;
 
