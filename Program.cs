@@ -3,8 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Configuration;
 using UsuariosApi.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var chaveToken = builder.Configuration["TokenLogin"];
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -30,6 +34,19 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", opt =>
+                    {
+                        opt.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(chaveToken!))
+                        };
+                    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,7 +62,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.MapControllers();
