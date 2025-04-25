@@ -34,10 +34,10 @@ namespace UsuariosApi.Controllers
         /// </summary>
         /// <param name="id">Id do usuário</param>
         /// <returns>Status code</returns>
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id)
+        [HttpGet("RecuperarUsuarioPorId")]
+        public async Task<IActionResult> GetUserById(int idUsuario)
         {
-            var usuario = await _context.Users.FindAsync(id);
+            var usuario = await _context.Users.FindAsync(idUsuario);
 
             if (usuario == null)
             {
