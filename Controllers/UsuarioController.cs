@@ -83,8 +83,8 @@ namespace UsuariosApi.Controllers
                 return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
-            usuario.Salt = Utilidades.PasswordHasher.SaltGenerator();
-            usuario.Senha = Utilidades.PasswordHasher.HashSenha(usuario.Senha, usuario.Salt);
+            //usuario.Salt = Utilidades.PasswordHasher.SaltGenerator();
+            //usuario.Senha = Utilidades.PasswordHasher.HashSenha(usuario.Senha, usuario.Salt);
 
             _context.Entry(usuario).State = EntityState.Modified;
 
@@ -102,6 +102,34 @@ namespace UsuariosApi.Controllers
                 {
                     throw;
                 }
+            }
+
+            return StatusCode((int)HttpStatusCode.OK);
+        }
+
+        [HttpPut("AlterarSenha")]
+        public async Task<IActionResult> ChangePassword(Models.DTO.AlterarSenhaDTO dados)
+        {
+            var usuario = await _context.Users.FirstOrDefaultAsync(u => u.Email == dados.Email);
+
+            if (usuario == null)
+            {
+                return StatusCode((int)HttpStatusCode.NotFound);
+            }
+
+            usuario.Salt = Utilidades.PasswordHasher.SaltGenerator();
+            usuario.Senha = Utilidades.PasswordHasher.HashSenha(dados.Senha, usuario.Salt);
+
+            _context.Entry(usuario).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             return StatusCode((int)HttpStatusCode.OK);

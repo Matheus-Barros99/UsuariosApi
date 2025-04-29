@@ -31,9 +31,7 @@ namespace UsuariosApi.Controllers
                 return StatusCode((int)HttpStatusCode.NotFound);
             }
 
-            var senhaUsuarioComHash = Utilidades.PasswordHasher.HashSenha(dadosLogin.Senha, usuario.Salt);
-
-            var senhaCorreta = Utilidades.PasswordHasher.VerificaSenha(dadosLogin.Senha, usuario.Salt, senhaUsuarioComHash);
+            var senhaCorreta = Utilidades.PasswordHasher.VerificaSenha(dadosLogin.Senha, usuario.Salt, usuario.Senha);
 
             if (!senhaCorreta)
             {
